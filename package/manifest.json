@@ -1,0 +1,10 @@
+{
+  "name": "TarDistillation",
+  "version_number": "0.0.2",
+  "website_url": "",
+  "description": "Burn tar out of resinous pine the way the old tar burners did: split core wood into tyrispik, dry it in a blast furnace, then sweat out tar and charcoal in a fermenter.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2351",
+    "ValheimModding-Jotunn-2.30.2"
+  ]
+}

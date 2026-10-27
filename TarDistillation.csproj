@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>TarDistillation</AssemblyName>
+    <RootNamespace>TarDistillation</RootNamespace>
+    <Version>0.0.2</Version>
+    <Authors>hakon</Authors>
+    <Description>Distill tar from resinous pine wood in Valheim.</Description>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DebugType>portable</DebugType>
+    <!-- The game ships assemblies built against an older framework; the warnings are noise. -->
+    <NoWarn>MSB3277;CS0649</NoWarn>
+  </PropertyGroup>
+
+  <!--
+    Paths. Override on the command line if your install differs, e.g.
+      dotnet build -p:ValheimDir="D:\SteamLibrary\steamapps\common\Valheim"
+  -->
+  <PropertyGroup>
+    <ValheimDir Condition="'$(ValheimDir)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Valheim</ValheimDir>
+    <ManagedDir>$(ValheimDir)\valheim_Data\Managed</ManagedDir>
+    <ProfileDir Condition="'$(ProfileDir)' == ''">$(APPDATA)\Thunderstore Mod Manager\DataFolder\Valheim\profiles\HWandMT</ProfileDir>
+    <DeployDir Condition="'$(DeployDir)' == ''">$(ProfileDir)\BepInEx\plugins\hakon-TarDistillation</DeployDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="$(ManagedDir)\assembly_valheim.dll" Private="false" />
+    <Reference Include="$(ManagedDir)\assembly_utils.dll" Private="false" />
+    <Reference Include="$(ManagedDir)\UnityEngine*.dll" Private="false" />
+    <Reference Include="$(ProfileDir)\BepInEx\core\BepInEx.dll" Private="false" />
+    <Reference Include="$(ProfileDir)\BepInEx\core\0Harmony.dll" Private="false" />
+    <Reference Include="$(ProfileDir)\BepInEx\plugins\ValheimModding-Jotunn\Jotunn.dll" Private="false" />
+  </ItemGroup>
+
+  <!--
+    Off by default, so a build cannot plant a second copy of the DLL beside one installed
+    through Thunderstore. Opt in while developing: dotnet build -p:Deploy=true
+  -->
+  <Target Name="DeployToProfile" AfterTargets="Build" Condition="'$(Deploy)' == 'true' And Exists('$(ProfileDir)')">
+    <MakeDir Directories="$(DeployDir)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(DeployDir)" />
+    <Message Importance="high" Text="Deployed $(TargetFileName) -&gt; $(DeployDir)" />
+  </Target>
+
+</Project>
