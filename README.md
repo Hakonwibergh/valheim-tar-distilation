@@ -1,5 +1,7 @@
 # Tar Distillation
 
+[github.com/Hakonwibergh/valheim-tar-distilation](https://github.com/Hakonwibergh/valheim-tar-distilation)
+
 A Valheim mod that adds a second way to get tar: burn it out of resinous pine wood,
 the way Norwegian tar burners did it. The plains tar pits are untouched — you can
 still go and farm them, this is just the other option.
@@ -235,13 +237,32 @@ Needs the .NET SDK. Valheim, BepInEx and Jotunn supply the references, so the pa
 dotnet build
 ```
 
-Defaults to the Steam install under `C:\Program Files (x86)` and the Thunderstore
-profile `HWandMT`, and copies the built DLL into that profile's `BepInEx/plugins`.
-Override either:
+`ProfileDir` has to point at a profile that actually holds BepInEx and Jotunn, because the
+build references their DLLs. It defaults to the Steam install under
+`C:\Program Files (x86)` and the profile named `Default`, which is the one a fresh
+Thunderstore Mod Manager install creates — if yours is named anything else, set it.
+
+The tidiest way is a **`Local.props`** next to the csproj. It is gitignored, so your paths
+stay on your machine:
+
+```xml
+<Project>
+  <PropertyGroup>
+    <ProfileDir>$(APPDATA)\Thunderstore Mod Manager\DataFolder\Valheim\profiles\MyProfile</ProfileDir>
+    <!-- <ValheimDir>D:\SteamLibrary\steamapps\common\Valheim</ValheimDir> -->
+  </PropertyGroup>
+</Project>
+```
+
+The command line works too, and wins over both:
 
 ```sh
 dotnet build -p:ValheimDir="D:\SteamLibrary\steamapps\common\Valheim" -p:ProfileDir="..."
 ```
+
+To drop the built DLL straight into that profile while developing, add `-p:Deploy=true`.
+It is off by default so a build cannot plant a second copy of the plugin beside one
+installed from Thunderstore — two copies means BepInEx loads it twice.
 
 ### Packaging
 

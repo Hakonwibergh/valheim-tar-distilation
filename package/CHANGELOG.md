@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.3
+
+- Source code published at
+  [github.com/Hakonwibergh/valheim-tar-distilation](https://github.com/Hakonwibergh/valheim-tar-distilation),
+  now linked from the package page.
+- Build: the Thunderstore profile path is a placeholder instead of a personal one, and a
+  gitignored `Local.props` can hold your own paths. No change to the mod itself.
+
 ## 0.0.2
 
 - **A batch now gives 25 tar and 10 coal**, up from 6 and 2. Half a stack of tar per run:

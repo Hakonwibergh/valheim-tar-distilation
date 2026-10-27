@@ -1,11 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <!--
+    Your own paths, kept out of the repo. Copy the block from the README into a file
+    called Local.props next to this one; it is gitignored, and the defaults below give
+    way to anything it sets.
+  -->
+  <Import Project="Local.props" Condition="Exists('Local.props')" />
+
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <LangVersion>latest</LangVersion>
     <AssemblyName>TarDistillation</AssemblyName>
     <RootNamespace>TarDistillation</RootNamespace>
-    <Version>0.0.2</Version>
+    <Version>0.0.3</Version>
     <Authors>hakon</Authors>
     <Description>Distill tar from resinous pine wood in Valheim.</Description>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -15,13 +22,15 @@
   </PropertyGroup>
 
   <!--
-    Paths. Override on the command line if your install differs, e.g.
+    Paths. "Default" is the profile a fresh Thunderstore Mod Manager install creates;
+    point ProfileDir at whichever profile holds your BepInEx and Jotunn, since the build
+    references them. Override in Local.props, or on the command line, e.g.
       dotnet build -p:ValheimDir="D:\SteamLibrary\steamapps\common\Valheim"
   -->
   <PropertyGroup>
     <ValheimDir Condition="'$(ValheimDir)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Valheim</ValheimDir>
     <ManagedDir>$(ValheimDir)\valheim_Data\Managed</ManagedDir>
-    <ProfileDir Condition="'$(ProfileDir)' == ''">$(APPDATA)\Thunderstore Mod Manager\DataFolder\Valheim\profiles\HWandMT</ProfileDir>
+    <ProfileDir Condition="'$(ProfileDir)' == ''">$(APPDATA)\Thunderstore Mod Manager\DataFolder\Valheim\profiles\Default</ProfileDir>
     <DeployDir Condition="'$(DeployDir)' == ''">$(ProfileDir)\BepInEx\plugins\hakon-TarDistillation</DeployDir>
   </PropertyGroup>
 
