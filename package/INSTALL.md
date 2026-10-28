@@ -17,7 +17,15 @@ than left holding prefabs it cannot resolve.
 ## Players — by hand
 
 Unpack the zip and copy `BepInEx/plugins/TarDistillation/` into your game's `BepInEx/
-plugins/`. The DLL is the only file that matters.
+plugins/` — the whole folder, so that the `assets` folder lands beside the DLL:
+
+```
+BepInEx/plugins/TarDistillation/TarDistillation.dll
+BepInEx/plugins/TarDistillation/assets/
+```
+
+The DLL on its own is a working mod; without `assets` the two tyrispik items just look
+like the vanilla log and bark they are cloned from.
 
 ## Dedicated server
 
@@ -32,6 +40,10 @@ Anywhere under `BepInEx/plugins/` works. Then restart the server. There is no co
 to place — BepInEx writes `BepInEx/config/hakon.valheim.tardistillation.cfg` with the
 defaults on the first run.
 
+The `assets` folder that comes with it holds the item models, which a headless server
+never draws. Copying it anyway is simplest and harmless; leaving it out changes nothing a
+player sees, because each client draws from its own copy.
+
 ## Configuration
 
 `BepInEx/config/hakon.valheim.tardistillation.cfg`, written with the defaults the first
@@ -40,9 +52,13 @@ manager's *Config editor*, or in game with
 [Configuration Manager](https://thunderstore.io/c/valheim/p/Azumatt/Official_BepInEx_ConfigurationManager/)
 on `F1`.
 
-Only the server's copy matters. Every setting is admin only: Jotunn locks the entries
-clientside and sends the server's values during the connect handshake, so a player's local
-file is ignored.
+Only the server's copy matters for the chain. Those settings are admin only: Jotunn locks
+the entries clientside and sends the server's values during the connect handshake, so a
+player's local file is ignored.
+
+`4 - Appearance` is the exception. Those two settings only change what one machine draws,
+so they are not synced and each player keeps their own — there is nothing for a server
+admin to set there.
 
 | Section | Setting | Default | Range | Applies |
 | --- | --- | --- | --- | --- |
@@ -54,6 +70,8 @@ file is ignored.
 | 3 - Burning | Tar per batch | 25 | 1-50 | Immediately* |
 | 3 - Burning | Coal per batch | 10 | 0-50 | Immediately* |
 | 3 - Burning | Burning seconds | 0 | 0-86400 | Immediately |
+| 4 - Appearance | Custom models | `true` | on/off | Restart, local |
+| 4 - Appearance | Model scale | 0.5 | 0.1-3.0 | Immediately, local |
 
 \* Fermenters already placed and loaded keep the yield they were built with until their
 zone reloads.

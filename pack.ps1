@@ -59,6 +59,13 @@ New-Item -ItemType Directory -Force -Path $dist | Out-Null
 $plugins = Join-Path $stage 'BepInEx\plugins\TarDistillation'
 New-Item -ItemType Directory -Force -Path $plugins | Out-Null
 Copy-Item $dll $plugins
+
+# The models, textures and icons, read off disk at runtime. The plugin falls back to the
+# vanilla look without them, so a missing folder costs the look and nothing else - but the
+# package is the only place a player gets them from.
+$assets = Join-Path $root 'assets'
+if (-not (Test-Path $assets)) { throw "Missing $assets" }
+Copy-Item $assets -Destination $plugins -Recurse
 Copy-Item (Join-Path $root 'package\manifest.json') $stage
 Copy-Item (Join-Path $root 'package\icon.png') $stage
 Copy-Item (Join-Path $root 'package\INSTALL.md') $stage

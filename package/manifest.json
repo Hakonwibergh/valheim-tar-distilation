@@ -1,6 +1,6 @@
 {
   "name": "TarDistillation",
-  "version_number": "0.0.3",
+  "version_number": "0.0.4",
   "website_url": "https://github.com/Hakonwibergh/valheim-tar-distilation",
   "description": "Burn tar out of resinous pine the way the old tar burners did: split core wood into tyrispik, dry it in a blast furnace, then sweat out tar and charcoal in a fermenter.",
   "dependencies": [

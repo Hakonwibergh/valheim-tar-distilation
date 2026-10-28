@@ -3,3 +3,6 @@ obj/
 *.user
 dist/
 Local.props
+
+# The model delivery as it arrived. What ships lives in assets/, copied from here.
+Tyrispik_Valheim_Asset_Starter_Package/

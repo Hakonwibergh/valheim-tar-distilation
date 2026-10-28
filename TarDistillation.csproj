@@ -12,7 +12,7 @@
     <LangVersion>latest</LangVersion>
     <AssemblyName>TarDistillation</AssemblyName>
     <RootNamespace>TarDistillation</RootNamespace>
-    <Version>0.0.3</Version>
+    <Version>0.0.4</Version>
     <Authors>hakon</Authors>
     <Description>Distill tar from resinous pine wood in Valheim.</Description>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -52,8 +52,13 @@
     through Thunderstore. Opt in while developing: dotnet build -p:Deploy=true
   -->
   <Target Name="DeployToProfile" AfterTargets="Build" Condition="'$(Deploy)' == 'true' And Exists('$(ProfileDir)')">
+    <ItemGroup>
+      <ModelAssets Include="assets\**\*" />
+    </ItemGroup>
     <MakeDir Directories="$(DeployDir)" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(DeployDir)" />
+    <!-- The models are read off disk next to the DLL, so they have to travel with it. -->
+    <Copy SourceFiles="@(ModelAssets)" DestinationFolder="$(DeployDir)\assets\%(RecursiveDir)" />
     <Message Importance="high" Text="Deployed $(TargetFileName) -&gt; $(DeployDir)" />
   </Target>
 

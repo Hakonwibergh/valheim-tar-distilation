@@ -59,6 +59,37 @@ thin watery turpentine first, then acidic *tjærelóg*, then clean tar at the bo
 and the burner read the smoke colour to steer the temperature. That is a mini-game, not
 a recipe, so the fermenter just hands over finished tar.
 
+## What it looks like
+
+Both items carry their own model: a bundle of five split sticks, raw in a resinous orange
+and dried in a darker, cracked brown, with a matching inventory icon each. Underneath they
+are still clones of core wood and elder bark — that is what gives them the right weight,
+stack size and physics — but nothing of the log or the bark is left on screen.
+
+The parts live in `assets/`, beside the plugin:
+
+```
+BepInEx/plugins/TarDistillation/
+  TarDistillation.dll
+  assets/
+    Tyrispik.obj  Tyrispik_albedo.png  Tyrispik_icon.png
+    TyrispikDried.obj  TyrispikDried_albedo.png  TyrispikDried_icon.png
+```
+
+They are read when the game loads. **If the folder is missing the mod still works** — the
+items fall back to looking like a log and a piece of bark, and the log in
+`BepInEx/LogOutput.log` names the file it could not read. Nothing about the chain changes.
+
+There is no asset bundle, which is the usual way a Valheim mod ships a model and the one
+part of this that needs the Unity editor. A mesh is only numbers and a PNG only pixels, so
+both are read straight off disk at runtime; the one thing that genuinely cannot be built
+that way is a **shader**, so the material is cloned from the vanilla wood the item was
+cloned from and only its albedo is swapped. That is what keeps the bundle lit, wetted and
+fogged like the wood lying beside it instead of like a bright sticker.
+
+Two settings under [4 - Appearance](#4---appearance) cover the size and an off switch.
+They are local to each machine, not synced from the server.
+
 ## Install
 
 Needs [BepInExPack Valheim](https://thunderstore.io/c/valheim/p/denikson/BepInExPack_Valheim/)
@@ -75,9 +106,13 @@ The mod adds items, so it is marked `EveryoneMustHaveMod` with `VersionStrictnes
 - **Install it on the server and on every client**, at the same version. A client
   without it will be refused, which is the point — the alternative is a client that
   cannot resolve the item prefabs.
-- **The server's config wins.** Every setting is admin-only, so Jotunn locks the entries
-  on clients and pushes the server's values down as part of the connect handshake. You
-  only have to keep the server's config file correct.
+- **The server's config wins**, for everything that touches the chain. Those settings are
+  admin-only, so Jotunn locks the entries on clients and pushes the server's values down as
+  part of the connect handshake. You only have to keep the server's config file correct.
+- **Except `4 - Appearance`.** Model scale and the off switch for the shipped models change
+  what one machine draws, nothing more, so they are not synced and every player keeps their
+  own. A server does not need the `assets` folder at all - it draws nothing - though there
+  is no harm in the whole package being unpacked there, which is what the install steps do.
 - Amounts (`Core wood per batch`, `Resin per batch`, `Tar per batch`, `Coal per batch`)
   are applied to the live recipe and the fermenter when they change, so a synced value
   takes effect without a restart. Fermenters that are already placed and loaded keep the
@@ -109,8 +144,8 @@ time the mod runs. Three ways to edit it:
   *Config editor*.
 - **In a text editor**, with the game or server shut down.
 
-On a server, the server's file is the only one that matters — see
-[Multiplayer](#multiplayer).
+On a server, the server's file is the only one that matters for the chain itself; the two
+appearance settings stay local to each machine — see [Multiplayer](#multiplayer).
 
 ### The settings
 
@@ -155,6 +190,26 @@ stack and assumes you squeeze the wood dry, while `6` is roughly what the histor
 20–25 % yield works out to. **Coal per batch** set to `0` turns the by-product off, if
 you would rather the chain cost fuel outright instead of paying back what the furnace
 burned — at `10` a run keeps itself in fuel.
+
+#### 4 - Appearance
+
+| Setting | Default | Range | Applies |
+| --- | --- | --- | --- |
+| Custom models | `true` | on/off | Restart |
+| Model scale | 0.5 | 0.1–3.0 | Immediately\* |
+
+\* Tyrispik already lying on the ground keeps the size it was dropped at.
+
+The one section that is **not** admin-only and not synced: both settings change what a
+single machine draws and nothing else, so a server has no opinion and players on the same
+server can disagree about them freely.
+
+**Custom models** off falls back to the vanilla log and bark, which is also what happens
+by itself when the `assets` folder is missing. **Model scale** multiplies the size the
+bundle was modelled at: `1` is about a metre and a fifth across, the default `0.5` an
+armful of kindling, `0.25` a handful. Weight, stack size and the collider you kick along
+the ground are untouched — it is the mesh and nothing else. Turning it in the in-game
+config menu and dropping a fresh bundle is the quickest way to settle on a size.
 
 ### The two timers
 
@@ -261,8 +316,9 @@ dotnet build -p:ValheimDir="D:\SteamLibrary\steamapps\common\Valheim" -p:Profile
 ```
 
 To drop the built DLL straight into that profile while developing, add `-p:Deploy=true`.
-It is off by default so a build cannot plant a second copy of the plugin beside one
-installed from Thunderstore — two copies means BepInEx loads it twice.
+It copies `assets/` along with it, since the models are read from beside the DLL. It is
+off by default so a build cannot plant a second copy of the plugin beside one installed
+from Thunderstore — two copies means BepInEx loads it twice.
 
 ### Packaging
 
@@ -271,10 +327,13 @@ installed from Thunderstore — two copies means BepInEx loads it twice.
 ```
 
 Builds Release and writes one archive to `dist/`: `TarDistillation-<version>.zip`, with
-`manifest.json`, `icon.png`, `README.md` and `INSTALL.md` at the root and the plugin at
-`BepInEx/plugins/TarDistillation/TarDistillation.dll`. That is the layout Thunderstore
+`manifest.json`, `icon.png`, `README.md` and `INSTALL.md` at the root, and the plugin plus
+its `assets/` folder at `BepInEx/plugins/TarDistillation/`. That is the layout Thunderstore
 takes on upload, the layout mod managers import, and the layout a server root already has,
 so the same zip serves players and the server.
+
+The models go in the package, not in the DLL. Keeping them loose is what lets a server
+admin swap a texture or drop the folder entirely without a rebuild.
 
 Entry paths are written with forward slashes, so `unzip` on a Linux server builds the
 folder tree instead of one oddly named file.
@@ -287,3 +346,11 @@ Compiles clean against Valheim build 25909357, BepInEx 5.4.2351 and Jotunn 2.30.
 every game and Jotunn API it touches was checked against those assemblies. It has not
 been run in-game yet — that is the next step, ideally on a second profile before it goes
 near a live world.
+
+The models were checked as far as they can be without starting the game: both meshes read
+back as 450 triangles with every face pointing outwards, the sides smoothing along each
+stick while the sawn ends stay sharp, UVs inside 0–1 and the whole bundle centred on the
+item's pivot. What that cannot tell you is how it sits in Valheim's own light, so the
+first run is worth doing with a bundle on the ground in front of you: check the size
+against `Model scale`, check it is not half-sunk in the ground, and check the texture
+reads as wood rather than as orange plastic.

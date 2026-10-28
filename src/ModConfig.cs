@@ -5,8 +5,10 @@ using Jotunn.Configs;
 namespace TarDistillation
 {
     /// <summary>
-    ///     Every tunable of the mod. All entries are admin only, so Jotunn locks them on
-    ///     clients and pushes the server's values down on connect. See README, "Multiplayer".
+    ///     Every tunable of the mod. Everything that touches the chain itself is admin only,
+    ///     so Jotunn locks it on clients and pushes the server's values down on connect; see
+    ///     README, "Multiplayer". The appearance section is the exception - it changes nothing
+    ///     but what one machine draws, so it stays local and each player keeps their own.
     /// </summary>
     internal class ModConfig
     {
@@ -35,6 +37,13 @@ namespace TarDistillation
         /// <summary>Seconds for one burn. 0 keeps the fermenter's own duration.</summary>
         public readonly ConfigEntry<int> BurningSeconds;
 
+        /// <summary>Use the models and icons shipped in assets/, rather than the vanilla
+        /// wood the items are cloned from. Local, and read once at startup.</summary>
+        public readonly ConfigEntry<bool> CustomModels;
+
+        /// <summary>Size of the shipped model where it lies on the ground. Local.</summary>
+        public readonly ConfigEntry<float> ModelScale;
+
         /// <summary>Raised when a value that can be applied without a restart changes.</summary>
         public event Action ValuesChanged;
 
@@ -43,6 +52,7 @@ namespace TarDistillation
             const string sSplit = "1 - Splitting";
             const string sDry = "2 - Drying";
             const string sBurn = "3 - Burning";
+            const string sLook = "4 - Appearance";
 
             SplittingStation = Bind(file, sSplit, "Splitting station", "ArtisanTable",
                 "Crafting station the tyrispik recipe is attached to. ArtisanTable puts the " +
@@ -108,10 +118,30 @@ namespace TarDistillation
                 "already burning, so lowering it can finish a batch that is under way.",
                 new AcceptableValueRange<int>(0, 86400));
 
+            CustomModels = BindLocal(file, sLook, "Custom models", true,
+                "Whether the two tyrispik items use the bundle model, wood texture and icons " +
+                "shipped in the assets folder beside the plugin. Off, they fall back to the " +
+                "vanilla items they are cloned from - a round log and a piece of elder bark - " +
+                "which is also what happens by itself if the assets folder is missing. Purely " +
+                "what this machine draws: it is not synced, a server does not care, and " +
+                "players on the same server can disagree about it. Read once while the game " +
+                "loads, so it needs a restart.",
+                null);
+
+            ModelScale = BindLocal(file, sLook, "Model scale", 0.5f,
+                "How big the shipped model is where it lies on the ground, as a multiplier on " +
+                "the size the model was built at: 1 is a bundle about a metre and a fifth " +
+                "long, 0.5 an armful of kindling, 0.25 a handful. Only the look changes - " +
+                "weight, stack size and the collider you walk into are untouched. Local, like " +
+                "the setting above. Takes effect without a restart, but tyrispik already lying " +
+                "on the ground keeps the size it was dropped at.",
+                new AcceptableValueRange<float>(0.1f, 3f));
+
             CoreWoodPerBatch.SettingChanged += OnSettingChanged;
             ResinPerBatch.SettingChanged += OnSettingChanged;
             TarPerBatch.SettingChanged += OnSettingChanged;
             CoalPerBatch.SettingChanged += OnSettingChanged;
+            ModelScale.SettingChanged += OnSettingChanged;
         }
 
         private void OnSettingChanged(object sender, EventArgs e)
@@ -119,11 +149,20 @@ namespace TarDistillation
             ValuesChanged?.Invoke();
         }
 
+        /// <summary>Admin only: locked on clients, the server's value wins.</summary>
         private static ConfigEntry<T> Bind<T>(ConfigFile file, string section, string key, T value,
             string description, AcceptableValueBase acceptableValues)
         {
             return file.Bind(section, key, value, new ConfigDescription(description, acceptableValues,
                 new ConfigurationManagerAttributes { IsAdminOnly = true }));
+        }
+
+        /// <summary>Not synced: this machine's own, and nothing a server needs to agree on.</summary>
+        private static ConfigEntry<T> BindLocal<T>(ConfigFile file, string section, string key, T value,
+            string description, AcceptableValueBase acceptableValues)
+        {
+            return file.Bind(section, key, value, new ConfigDescription(description, acceptableValues,
+                new ConfigurationManagerAttributes { IsAdminOnly = false }));
         }
     }
 }

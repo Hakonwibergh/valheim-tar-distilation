@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.0.4
+
+- **Tyrispik and dried tyrispik have their own look.** A bundle of split pine with its
+  own wood texture and its own inventory icon, instead of the round log and the piece of
+  elder bark they are cloned from. The dried bundle is the darker, cracked one.
+- The models are plain OBJ and PNG files in `assets/`, beside the plugin, read when the
+  game loads — no asset bundle, so the material is borrowed from the vanilla wood and the
+  items still darken in rain and sit in the fog like everything around them.
+- New section `4 - Appearance` with two settings, `Custom models` and `Model scale`. They
+  are the first settings in the mod that are **not** server-synced: they change nothing
+  but what one machine draws, so each player keeps their own.
+- Copy `assets/` along with the DLL. Without it the items quietly fall back to the vanilla
+  look and the log says which file it could not read.
+
 ## 0.0.3
 
 - Source code published at

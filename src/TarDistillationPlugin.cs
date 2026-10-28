@@ -22,7 +22,7 @@ namespace TarDistillation
     {
         public const string PluginGuid = "hakon.valheim.tardistillation";
         public const string PluginName = "TarDistillation";
-        public const string PluginVersion = "0.0.3";
+        public const string PluginVersion = "0.0.4";
 
         /// <summary>Raw split tyri. Crafted, then dried.</summary>
         public const string SpikPrefab = "Tyrispik";
@@ -51,8 +51,8 @@ namespace TarDistillation
 
             // Amounts can be retuned without a restart. On a server the admin values arrive
             // through Jotunn config sync, before the client loads into the world.
-            Cfg.ValuesChanged += ApplyAmounts;
-            SynchronizationManager.OnConfigurationSynchronized += (sender, args) => ApplyAmounts();
+            Cfg.ValuesChanged += ApplyLiveSettings;
+            SynchronizationManager.OnConfigurationSynchronized += (sender, args) => ApplyLiveSettings();
 
             harmony = new Harmony(PluginGuid);
             harmony.PatchAll();
@@ -131,6 +131,8 @@ namespace TarDistillation
                 Requirements = requirements.ToArray(),
             });
 
+            ItemVisuals.Apply(spik.ItemPrefab, spik.ItemDrop.m_itemData.m_shared, SpikPrefab);
+
             ItemManager.Instance.AddItem(spik);
         }
 
@@ -147,6 +149,8 @@ namespace TarDistillation
             shared.m_description = ModLocalization.DriedDescription;
             shared.m_weight = 3f;
             shared.m_maxStackSize = 50;
+
+            ItemVisuals.Apply(dried.ItemPrefab, shared, DriedSpikPrefab);
 
             ItemManager.Instance.AddItem(dried);
         }
@@ -172,13 +176,15 @@ namespace TarDistillation
         }
 
         /// <summary>
-        ///     Pushes changed amounts onto the live recipe and fermenter prefab. Station choices
-        ///     are not re-applied here, those are read once at startup.
+        ///     Pushes everything that can change mid-session onto the live prefabs: the recipe
+        ///     amounts, the fermenter yield and the size of the models. Station choices and
+        ///     whether the models are used at all are read once at startup, not here.
         /// </summary>
-        private static void ApplyAmounts()
+        private static void ApplyLiveSettings()
         {
             UpdateRecipe();
             UpdateFermenterYield();
+            ItemVisuals.ApplyScale();
         }
 
         private static void UpdateRecipe()
