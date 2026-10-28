@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.0.5
+
+- **New inventory icons.** A stack of split logs seen end-on, bark and annual rings and
+  all, in place of the flat orange silhouette 0.0.4 shipped with. The visible log ends
+  give the silhouette something to hold onto, so it still reads at 32 px, and the raw and
+  dried bundles stay apart at a glance. They are a good deal prettier than the model they
+  label, and will stay ahead of it until the mesh is redone to match.
+- **`Model scale` now defaults to 0.25**, down from 0.5, which puts a dropped bundle at
+  roughly 0.3 m — the size the concept art marks it at. If you preferred the larger
+  bundle, set it back to 0.5; the setting is local to your own machine either way.
+- Nothing else changed: same chain, same recipe, same amounts, same timers. Only the patch
+  number moved, and the mod checks versions at `Minor` strictness, so **a 0.0.4 client can
+  still join a 0.0.5 server** and the other way round — nobody is locked out while the
+  server updates. The two settings that did change are local anyway, so a player still on
+  0.0.4 simply keeps the old icons.
+
 ## 0.0.4
 
 - **Tyrispik and dried tyrispik have their own look.** A bundle of split pine with its

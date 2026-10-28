@@ -22,7 +22,7 @@ namespace TarDistillation
     {
         public const string PluginGuid = "hakon.valheim.tardistillation";
         public const string PluginName = "TarDistillation";
-        public const string PluginVersion = "0.0.4";
+        public const string PluginVersion = "0.0.5";
 
         /// <summary>Raw split tyri. Crafted, then dried.</summary>
         public const string SpikPrefab = "Tyrispik";

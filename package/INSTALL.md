@@ -71,7 +71,7 @@ admin to set there.
 | 3 - Burning | Coal per batch | 10 | 0-50 | Immediately* |
 | 3 - Burning | Burning seconds | 0 | 0-86400 | Immediately |
 | 4 - Appearance | Custom models | `true` | on/off | Restart, local |
-| 4 - Appearance | Model scale | 0.5 | 0.1-3.0 | Immediately, local |
+| 4 - Appearance | Model scale | 0.25 | 0.1-3.0 | Immediately, local |
 
 \* Fermenters already placed and loaded keep the yield they were built with until their
 zone reloads.

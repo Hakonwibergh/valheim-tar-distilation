@@ -62,9 +62,14 @@ a recipe, so the fermenter just hands over finished tar.
 ## What it looks like
 
 Both items carry their own model: a bundle of five split sticks, raw in a resinous orange
-and dried in a darker, cracked brown, with a matching inventory icon each. Underneath they
-are still clones of core wood and elder bark — that is what gives them the right weight,
-stack size and physics — but nothing of the log or the bark is left on screen.
+and dried in a darker, cracked brown. Underneath they are still clones of core wood and
+elder bark — that is what gives them the right weight, stack size and physics — but
+nothing of the log or the bark is left on screen.
+
+The **inventory icons are cut from the supplied bundle renders**, not from that mesh, so
+they show the stack of split logs the models are working towards rather than the five
+plain sticks that are in the game today. They look considerably better than the mesh does,
+and that gap is the honest state of things until the mesh catches up.
 
 The parts live in `assets/`, beside the plugin:
 
@@ -196,7 +201,7 @@ burned — at `10` a run keeps itself in fuel.
 | Setting | Default | Range | Applies |
 | --- | --- | --- | --- |
 | Custom models | `true` | on/off | Restart |
-| Model scale | 0.5 | 0.1–3.0 | Immediately\* |
+| Model scale | 0.25 | 0.1–3.0 | Immediately\* |
 
 \* Tyrispik already lying on the ground keeps the size it was dropped at.
 
@@ -206,10 +211,12 @@ server can disagree about them freely.
 
 **Custom models** off falls back to the vanilla log and bark, which is also what happens
 by itself when the `assets` folder is missing. **Model scale** multiplies the size the
-bundle was modelled at: `1` is about a metre and a fifth across, the default `0.5` an
-armful of kindling, `0.25` a handful. Weight, stack size and the collider you kick along
-the ground are untouched — it is the mesh and nothing else. Turning it in the in-game
-config menu and dropping a fresh bundle is the quickest way to settle on a size.
+bundle was modelled at, which is about a metre and a fifth across — far too big for
+something you carry fifty of. The default `0.25` brings it to roughly **0.3 m**, the size
+the concept art asks for; `0.5` is a generous armful and `0.1` a handful of splinters.
+Weight, stack size and the collider you kick along the ground are untouched — it is the
+mesh and nothing else. Turning it in the in-game config menu and dropping a fresh bundle
+is the quickest way to settle on a size.
 
 ### The two timers
 
