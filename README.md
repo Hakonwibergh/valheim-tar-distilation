@@ -201,7 +201,7 @@ burned — at `10` a run keeps itself in fuel.
 | Setting | Default | Range | Applies |
 | --- | --- | --- | --- |
 | Custom models | `true` | on/off | Restart |
-| Model scale | 0.25 | 0.1–3.0 | Immediately\* |
+| Model scale | 0.5 | 0.1–3.0 | Immediately\* |
 
 \* Tyrispik already lying on the ground keeps the size it was dropped at.
 
@@ -212,8 +212,9 @@ server can disagree about them freely.
 **Custom models** off falls back to the vanilla log and bark, which is also what happens
 by itself when the `assets` folder is missing. **Model scale** multiplies the size the
 bundle was modelled at, which is about a metre and a fifth across — far too big for
-something you carry fifty of. The default `0.25` brings it to roughly **0.3 m**, the size
-the concept art asks for; `0.5` is a generous armful and `0.1` a handful of splinters.
+something you carry fifty of. The default `0.5` brings it to roughly **0.6 m**, a
+generous armful; `0.25` is the 0.3 m the concept art asks for and `0.1` a handful of
+splinters.
 Weight, stack size and the collider you kick along the ground are untouched — it is the
 mesh and nothing else. Turning it in the in-game config menu and dropping a fresh bundle
 is the quickest way to settle on a size.

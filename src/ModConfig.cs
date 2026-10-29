@@ -128,15 +128,15 @@ namespace TarDistillation
                 "loads, so it needs a restart.",
                 null);
 
-            ModelScale = BindLocal(file, sLook, "Model scale", 0.25f,
+            ModelScale = BindLocal(file, sLook, "Model scale", 0.5f,
                 "How big the shipped model is where it lies on the ground, as a multiplier on " +
                 "the size the model was built at. The mesh is about a metre and a fifth long " +
-                "at 1, so the default 0.25 makes a bundle roughly 0.3 m across - the size the " +
-                "concept art calls for - while 0.5 gives a generous armful and 0.1 a handful " +
-                "of splinters. Only the look changes: weight, stack size and the collider you " +
-                "walk into are untouched. Local, like the setting above. Takes effect without " +
-                "a restart, but tyrispik already lying on the ground keeps the size it was " +
-                "dropped at.",
+                "at 1, so the default 0.5 makes a bundle roughly 0.6 m across - a generous " +
+                "armful - while 0.25 brings it down to the 0.3 m the concept art calls for " +
+                "and 0.1 to a handful of splinters. Only the look changes: weight, stack " +
+                "size and the collider you walk into are untouched. Local, like the setting " +
+                "above. Takes effect without a restart, but tyrispik already lying on the " +
+                "ground keeps the size it was dropped at.",
                 new AcceptableValueRange<float>(0.1f, 3f));
 
             CoreWoodPerBatch.SettingChanged += OnSettingChanged;

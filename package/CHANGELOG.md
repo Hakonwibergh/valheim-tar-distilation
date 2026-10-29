@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.0.6
+
+- **`Model scale` defaults to 0.5 again**, back up from the 0.25 that 0.0.5 shipped. A
+  dropped bundle is roughly **0.6 m** across, a generous armful rather than the 0.3 m the
+  concept art marks. Set it to 0.25 if you preferred the smaller one — the setting is local
+  to your own machine, and the range is unchanged.
+- **Softer inventory icons.** Same two bundles of split logs, repainted with the edges
+  and the grain eased off. The 0.0.5 pair were cut hard enough that at 32 px the detail
+  turned to noise; these hold their shape in the slot and still read apart at a glance,
+  raw against dried.
+- Nothing else changed. The mod checks versions at `Minor` strictness, so **0.0.5 and
+  0.0.6 still accept each other**, and the settings that moved are local anyway: a
+  player who stays on 0.0.5 simply keeps the smaller bundle and the older icons.
+
 ## 0.0.5
 
 - **New inventory icons.** A stack of split logs seen end-on, bark and annual rings and
